@@ -31,13 +31,13 @@ def messages_by_id(id):
 
 data = [{
     "user": "raul",
-    "password": 123456
+    "password": "123456"
 }, {
     "user": "cristhian",
-    "password": 123456
+    "password": "123456"
 }, {
     "user": "frank",
-    "password": 12345678
+    "password": "12345678"
 }]
 
 @app.route("/login", methods=["GET", "POST"])
@@ -46,17 +46,18 @@ def login():
         return "you need to login"
     if request.method == "POST":
         raw = request.get_json()
-        print(raw)
         user = raw.get("user")
         password = raw.get("password")
-        # verificar con la data del array
-        # si es valido devolver "valid login"
-        # si es invalido devolver "invalid login"
-        return "login"
+        if user and password:
+            for i in data:
+                if i["user"] == user and str(i["password"]) == password:
+                    return "valid login"
+            return "invalid login"
+        else:
+            return "missing data"
 
 # /login
 # {"user": "cristhian", "password": "123456"}
 
-# GET /login?user=cristhian&password=123456
 # POST /login
 # {user:cristhian, password:123456}
