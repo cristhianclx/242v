@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Borrar usuario</title>
+{% endblock %}
+
+{% block content %}
+<h1>Borrar usuario</h1>
+
+<form method="POST">
+    <h2>¿Está seguro que desea borrar al usuario {{ user.id }}?</h2>
+    <button type="submit" class="btn btn-danger">Eliminar usuario</button>
+</form>
+{% endblock %}

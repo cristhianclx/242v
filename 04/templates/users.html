@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Users</title>
+{% endblock %}
+
+{% block content %}
+<h1>Usuarios</h1>
+<hr>
+<a href="{{ url_for('users_add') }}" class="btn btn-info">Add user</a>
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">First name</th>
+        <th scope="col">Last name</th>
+        <th scope="col">Age</th>
+        <th scope="col">Country</th>
+        <th scope="col">Created at</th>
+        <th scope="col">Options</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <th scope="row">{{ user.id }}</th>
+        <td>{{ user.first_name }}</td>
+        <td>{{ user.last_name }}</td>
+        <td>{{ user.age }}</td>
+        <td>{{ user.country }}</td>
+        <td>{{ user.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+        <td>
+            <a href="{{ url_for('users_by_id', id=user.id) }}" class="btn btn-primary">Detalle</a>
+            <a href="{{ url_for('users_edit_by_id', id=user.id) }}" class="btn btn-primary">Editar</a>
+            <a href="{{ url_for('users_delete_by_id', id=user.id) }}" class="btn btn-primary">Eliminar</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

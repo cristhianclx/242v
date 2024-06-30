@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Detalle de usuario</title>
+{% endblock %}
+
+{% block content %}
+<h1>Detalle de usuario</h1>
+<hr>
+    <div class="mb-3">
+      <label class="form-label">ID</label>
+      <input type="text" class="form-control" name="id" value="{{ user.id }}" disabled readonly>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">First name</label>
+        <input type="text" class="form-control" name="first_name" value="{{ user.first_name }}" disabled readonly>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Last name</label>
+        <input type="text" class="form-control" name="last_name" value="{{ user.last_name }}" disabled readonly>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Age</label>
+        <input type="text" class="form-control" name="age" value="{{ user.age}}" disabled readonly>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Country</label>
+        <input type="text" class="form-control" name="country" value="{{ user.country }}" disabled readonly>
+    </div> 
+    
+  {% endblock %}

@@ -11,3 +11,27 @@ flask --app main run --reload # correr Flask
 flask --app main db init # inicializar la base de datos
 flask --app main db migrate # crear la migracion
 flask --app main db upgrade # aplicas la migracion
+
+flask --app main shell
+
+>>> from main import db, User
+>>> user_1 = User(id = 1, first_name="Cristhian", last_name="Cueva", age=35, country="PE")
+>>> db.session.add(user_1)
+>>> db.session.commit()
+
+>>> from main import db, User
+>>> User.query.all()
+
+>>> from main import db, User
+>>> User.query.get_or_404(1)
+
+>>> from main import db, User
+>>> user = User.query.filter_by(id = 1).first()
+>>> user.age = 28
+>>> db.session.add(user)
+>>> db.session.commit()
+
+>>> from main import db, User
+>>> user = User.query.filter_by(id = 1).first()
+>>> db.session.delete(user)
+>>> db.session.commit()
