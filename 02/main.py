@@ -17,13 +17,17 @@ def data():
     raw = r.text
     soup = BeautifulSoup(raw, "html.parser")
     elements = soup.find_all("p", class_="ValueQuotation_text___mR_0")
-    compra = float(elements[2].text)
-    venta = float(elements[3].text)
     return {
         "sunat": {
-            "compra": compra,
-            "venta": venta
+            "compra": float(elements[2].text),
+            "venta": float(elements[3].text)
         },
-        "paralelo": {}, # revisar elements
-        "euro": {} # revisar elements
+        "paralelo": {
+            "compra": float(elements[0].text),
+            "venta": float(elements[1].text)
+        },
+        "euro": {
+            "compra": float(elements[6].text),
+            "venta": float(elements[7].text)
+        }
     }
