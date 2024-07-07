@@ -1,0 +1,45 @@
+# comandos
+
+python3 -m venv venv # crear un entorno virtual (el segundo venv es el nombre de la carpeta)
+source venv/bin/activate # activar el entorno virtual (linux)
+venv\Scripts\activate.bat # activar el entorno virtual (windows)
+pip install -r requirements.txt --upgrade
+deactivate # desactiva el entorno virtual
+
+flask --app main run --reload # correr Flask
+
+flask --app main db init # inicializar la base de datos
+flask --app main db migrate # crear la migracion
+flask --app main db upgrade # aplicas la migracion
+
+flask --app main shell
+
+>>> from main import db, Joke
+>>> Joke.query.all()
+
+# script to load jokes
+
+import csv
+
+rows = []
+
+with open("jokes.csv") as csv_file:
+    csv_reader = csv.reader(csv_file)
+    header = next(csv_reader)
+    for row in csv_reader:
+        rows.append(row)
+
+from main import db, Joke
+
+for row in rows:
+    joke = Joke(
+        routine_id = int(row[0]),
+        show_id = int(row[1]),
+        event_name = row[2],
+        show_name = row[3],
+        start_timestamp = row[4],
+        text = row[5],
+        video_id = row[6],
+    )
+    db.session.add(joke)
+    db.session.commit()

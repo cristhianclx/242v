@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Jokes</title>
+{% endblock %}
+
+{% block content %}
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Routine id</th>
+        <th scope="col">Show id</th>
+        <th scope="col">Event name</th>
+        <th scope="col">Show name</th>
+        <th scope="col">Text</th>
+        <th scope="col">Youtube Link (with time)</th>
+        <th scope="col">Options</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for joke in jokes %}
+      <tr>
+        <th scope="row">{{ joke.id }}</th>
+        <td>{{ joke.routine_id }}</td>
+        <td>{{ joke.show_id }}</td>
+        <td>{{ joke.event_name }}</td>
+        <td>{{ joke.show_name }}</td>
+        <td>{{ joke.text }}</td>
+        <td>{{ joke.video_id }} / {{ joke.start_timestamp }}</td>
+        <td><a href="#">Editar</a> <a href="#">Eliminar</a></td>
+      </tr>      
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
