@@ -16,8 +16,10 @@
         <th scope="col">Last name</th>
         <th scope="col">Age</th>
         <th scope="col">Country</th>
+        <th scope="col">Content</th>
         <th scope="col">Created at</th>
         <th scope="col">Options</th>
+        <th scope="col">Messages</th>
       </tr>
     </thead>
     <tbody>
@@ -28,11 +30,20 @@
         <td>{{ user.last_name }}</td>
         <td>{{ user.age }}</td>
         <td>{{ user.country }}</td>
+        {% if user.content %}
+        <td>{{ user.content|safe }}</td>
+        {% else %}
+        <td>-</td>
+        {% endif %}
         <td>{{ user.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
         <td>
             <a href="{{ url_for('users_by_id', id=user.id) }}" class="btn btn-primary">Detalle</a>
             <a href="{{ url_for('users_edit_by_id', id=user.id) }}" class="btn btn-primary">Editar</a>
             <a href="{{ url_for('users_delete_by_id', id=user.id) }}" class="btn btn-primary">Eliminar</a>
+        </td>
+        <td>
+          <a href="{{ url_for('messages_by_user', user_id=user.id) }}" class="btn btn-info">Ver mensajes</a>
+          <a href="{{ url_for('messages_add', user_id=user.id) }}" class="btn btn-info">Agregar mensaje</a>
         </td>
       </tr>
       {% endfor %}

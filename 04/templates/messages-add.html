@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-<title>Add user</title>
+<title>Add message to user {{ user.id }}</title>
 {% endblock %}
 
 {% block head %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block content %}
-<h1>Agregar usuario</h1>
+<h1>Agregar message a usuario {{ user.id }}</h1>
 <hr>
 {% if message %}
 <div class="alert alert-dark" role="alert">
@@ -22,26 +22,10 @@
 {% endif %}
 <form method="POST">
     <div class="mb-3">
-        <label class="form-label">First name</label>
-        <input type="text" class="form-control" name="first_name">
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Last name</label>
-        <input type="text" class="form-control" name="last_name">
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Age</label>
-        <input type="text" class="form-control" name="age">
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Country</label>
-        <input type="text" class="form-control" name="country">
-    </div>  
-    <div class="mb-3">
       <label class="form-label">Content</label>
       <textarea id="summernote" class="form-control" rows="3" name="content"></textarea>
     </div>
-    <button type="submit" class="btn btn-primary">Agregar usuario</button>
+    <button type="submit" class="btn btn-primary">Agregar mensaje</button>
   </form>
 {% endblock %}
 

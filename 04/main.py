@@ -17,11 +17,12 @@ class User(db.Model):
 
     __tablename__ = "users"
 
-    id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(150))
-    last_name = db.Column(db.String(150))
-    age = db.Column(db.Integer)
-    country = db.Column(db.String(50))
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    first_name = db.Column(db.String(150), nullable=False)
+    last_name = db.Column(db.String(150), nullable=False)
+    age = db.Column(db.Integer, nullable=False)
+    country = db.Column(db.String(50), nullable=False)
+    content = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
     def __repr__(self):
@@ -32,10 +33,13 @@ class Message(db.Model):
 
     __tablename__ = "messages"
 
-    id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(200))
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    content = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
-                       
+
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    user = db.relationship("User", backref="user")
+
     def __repr__(self):
         return "<Message {}>".format(self.id)
 
@@ -56,7 +60,13 @@ def users_add():
     if request.method == "GET":
         return render_template("users-add.html")
     if request.method == "POST":
-        user = User(id = request.form["id"], first_name=request.form["first_name"], last_name=request.form["last_name"], age=request.form["age"], country=request.form["country"])
+        user = User(
+            first_name=request.form["first_name"],
+            last_name=request.form["last_name"],
+            age=request.form["age"],
+            country=request.form["country"],
+            content=request.form.get("content", "")
+        )
         db.session.add(user)
         db.session.commit()
         return render_template("users-add.html", message="User added")
@@ -78,6 +88,7 @@ def users_edit_by_id(id):
         user.last_name = request.form["last_name"]
         user.age = request.form["age"]
         user.country = request.form["country"]
+        user.content = request.form.get("content", "")
         db.session.add(user)
         db.session.commit()
         return render_template("users-edit.html", user=user, message="User edited")
@@ -92,3 +103,28 @@ def users_delete_by_id(id):
         db.session.delete(user)
         db.session.commit()
         return redirect(url_for('users'))
+    
+
+@app.route("/messages-by-user/<user_id>")
+def messages_by_user(user_id):
+    user = User.query.get_or_404(user_id)
+    messages = Message.query.filter_by(user = user).all()
+    return render_template("messages-by-user.html", user=user, messages=messages)
+
+
+@app.route("/messages/add/<user_id>", methods=["GET", "POST"])
+def messages_add(user_id):
+    user = User.query.get_or_404(user_id)
+    if request.method == "GET":
+        return render_template("messages-add.html", user=user)
+    if request.method == "POST":
+        message = Message(content=request.form["content"], user = user)
+        db.session.add(message)
+        db.session.commit()
+        return render_template("messages-add.html", user=user, message="Mensaje agregado")
+
+
+# DETALLE DE MENSAJE
+# /messages/edit/<id> id del mensaje
+# ELIMINAR MENSAJE
+# /messages/delete/<id> id del mensaje
