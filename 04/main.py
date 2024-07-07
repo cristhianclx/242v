@@ -124,7 +124,30 @@ def messages_add(user_id):
         return render_template("messages-add.html", user=user, message="Mensaje agregado")
 
 
-# DETALLE DE MENSAJE
-# /messages/edit/<id> id del mensaje
-# ELIMINAR MENSAJE
-# /messages/delete/<id> id del mensaje
+@app.route("/messages/edit/<id>", methods=["GET", "POST"])
+def messages_edit_by_id(id):
+    message = Message.query.get_or_404(id)
+    if request.method == "GET":
+        return render_template("messages-edit.html", message=message)
+    if request.method == "POST":
+        message.content = request.form["content"]
+        db.session.add(message)
+        db.session.commit()
+        return render_template("messages-edit.html", message=message, notification="Mensaje actualizado")
+
+@app.route("/messages/<id>")
+def messages_by_id(id):
+    message = Message.query.get_or_404(id)
+    return render_template("messages-detail.html", message=message)
+
+
+@app.route("/messages/delete/<id>", methods=["GET", "POST"])
+def messages_delete_by_id(id):
+    message = Message.query.get_or_404(id)
+    user_id = message.user.id
+    if request.method == "GET":
+        return render_template("messages-delete.html", message=message)
+    if request.method == "POST":
+        db.session.delete(message)
+        db.session.commit()
+        return redirect(url_for('messages_by_user', user_id=user_id))

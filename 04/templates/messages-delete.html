@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Borrar mensaje</title>
+{% endblock %}
+
+{% block content %}
+<h1>Borrar mensaje</h1>
+
+<form method="POST">
+    <h2>¿Está seguro que desea borrar el mensaje {{ message.id }}?</h2>
+    <button type="submit" class="btn btn-danger">Eliminar mensaje</button>
+</form>
+{% endblock %}

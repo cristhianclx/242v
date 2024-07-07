@@ -29,8 +29,9 @@
         {% endif %}
         <td>{{ message.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
         <td>
-            <a href="#" class="btn btn-primary">Detalle</a>
-            <a href="#" class="btn btn-primary">Eliminar</a>
+            <a href="{{ url_for('messages_edit_by_id', id=message.id) }}" class="btn btn-primary">Editar</a>
+            <a href="{{ url_for('messages_by_id', id=message.id) }}" class="btn btn-primary">Detalle</a>
+            <a href="{{ url_for('messages_delete_by_id', id=message.id) }}" class="btn btn-primary">Eliminar</a>
         </td>
       </tr>
       {% endfor %}
