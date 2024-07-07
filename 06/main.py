@@ -24,13 +24,18 @@ class PokemonResource(Resource):
         raw = requests.get("https://pokeapi.co/api/v2/pokemon/{}".format(name))
         if raw.ok:
             data = raw.json()
-            print(data)
+            abilities = []
+            for x in data["abilities"]:
+                abilities.append(x["ability"]["name"])
+            forms = []
+            for x in data["forms"]:
+                forms.append(x["name"])
             return {
                 "name": name,
                 "height": data["height"],
-                # weight
-                # abilities ["static", "lightning-pod"]
-                # forms ["pikachu"]
+                "weight": data["weight"],
+                "abilities": abilities,
+                "forms": forms,
             }
         else:
             return {
