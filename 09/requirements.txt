@@ -1,0 +1,5 @@
+black
+Flask
+flask-marshmallow
+Flask-Migrate
+flask-restful

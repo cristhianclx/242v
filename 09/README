@@ -1,0 +1,15 @@
+# comandos
+
+python3 -m venv venv # crear un entorno virtual (el segundo venv es el nombre de la carpeta)
+source venv/bin/activate # activar el entorno virtual (linux)
+venv\Scripts\activate.bat # activar el entorno virtual (windows)
+pip install -r requirements.txt --upgrade
+deactivate # desactiva el entorno virtual
+
+flask --app main run --reload # correr Flask
+
+flask --app main db init # inicializar la base de datos
+flask --app main db migrate # crear la migracion
+flask --app main db upgrade # aplicas la migracion
+
+flask --app main shell
