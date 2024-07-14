@@ -70,6 +70,38 @@ user_public_schema = UserPublicSchema()
 users_public_schema = UserPublicSchema(many = True)
 
 
+class MessageSchema(ma.Schema):
+    user = ma.Nested(UserSchema)
+    class Meta:
+        fields = (
+            "id",
+            "content",
+            "created_at",
+            "user",
+        )
+        model = Message
+        datetimeformat = "%Y-%m-%d %H:%M:%S"
+
+
+message_schema = MessageSchema()
+messages_schema = MessageSchema(many = True)
+
+
+class MessageBasicSchema(ma.Schema):
+    class Meta:
+        fields = (
+            "id",
+            "content",
+            "created_at",
+        )
+        model = Message
+        datetimeformat = "%Y-%m-%d %H:%M:%S"
+
+
+message_basic_schema = MessageBasicSchema()
+messages_basic_schema = MessageBasicSchema(many = True)
+
+
 class IndexResource(Resource):
     def get(self):
         return {
@@ -118,16 +150,50 @@ class UsersPublicResource(Resource):
         return users_public_schema.dump(users)
 
 
+class MessagesResource(Resource):
+    def get(self):
+        messages = Message.query.all()
+        return messages_schema.dump(messages)
+
+    def post(self):
+        data = request.get_json()
+        message = Message(**data)
+        db.session.add(message)
+        db.session.commit()
+        return message_schema.dump(message), 201
+
+
+class MessageIDResource(Resource):
+    def get(self, id):
+        message = Message.query.get_or_404(id)
+        return message_schema.dump(message)
+    
+    def patch(self, id):
+        message = Message.query.get_or_404(id)
+        data = request.get_json()
+        message.content = data.get("content", message.content)
+        db.session.add(message)
+        db.session.commit()
+        return message_schema.dump(message)
+    
+    def delete(self, id):
+        message = Message.query.get_or_404(id)
+        db.session.delete(message)
+        db.session.commit()
+        return {}, 204
+
+
+class MessageByUserIDResource(Resource):
+    def get(self, user_id):
+        user = User.query.get_or_404(user_id)
+        messages = Message.query.filter_by(user = user).all()
+        return messages_basic_schema.dump(messages)
+
+
 api.add_resource(IndexResource, "/")
 api.add_resource(UsersPublicResource, "/users-public/")
 api.add_resource(UsersResource, "/users")
 api.add_resource(UserIDResource, "/users/<int:id>")
-
-# /messages
-#  ( ) GET - 200: read all messages
-#  ( ) POST - 201: create message
-# /messages/1
-#  ( ) GET - 200: read one
-#  ( ) DELETE - 204: delete
-# /messages-by-user/<user_id>
-#  ( ) GET - 200: messages by user
+api.add_resource(MessagesResource, "/messages")
+api.add_resource(MessageIDResource, "/messages/<int:id>")
+api.add_resource(MessageByUserIDResource, "/messages-by-user/<int:user_id>")
