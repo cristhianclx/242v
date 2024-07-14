@@ -1,5 +1,8 @@
 black
+flake8
 Flask
 flask-marshmallow
 Flask-Migrate
 flask-restful
+flask-restful-swagger-2
+isort
