@@ -1,0 +1,4 @@
+Flask
+flask-marshmallow
+flask-migrate
+flask-socketio
